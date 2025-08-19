@@ -1,5 +1,5 @@
 'use client';
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { FormData } from "../../types";
 
 interface ContactFormProps {
@@ -124,13 +124,11 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
     }
     
     const suspiciousPatterns = [
-      /https?:\/\/[^\s]+/gi,
-      /[^\w\s@.-]/gi,
+      /https?:\/\/[^\s]/gi,
     ];
     
     if (suspiciousPatterns.some(pattern => 
-      pattern.test(formData.name) || 
-      (formData.phone && pattern.test(formData.phone))
+      pattern.test(formData.name)
     )) {
       console.log('Suspicious content detected');
       return;
@@ -166,7 +164,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
   };
 
   // Initialize form when opened
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       resetForm();
     }
@@ -175,7 +173,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-purple-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg p-6 w-full max-w-md text-gray-900">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-bold text-purple-900">Оставить заявку</h3>
@@ -261,7 +259,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
               onChange={handleInputChange}
               maxLength={20}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="+7 (999) 123-45-67"
+              placeholder="7 (999) 123-45-67 (без спецсимволов)"
             />
           </div>
 
