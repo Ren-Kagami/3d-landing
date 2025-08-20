@@ -3,7 +3,7 @@ version: "3.9"
 services:
   app:
     build: .
-    container_name: my-yarn-app
+    container_name: 3d-print-container
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
