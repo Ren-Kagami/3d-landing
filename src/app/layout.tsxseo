@@ -1,0 +1,205 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import Script from 'next/script';
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin", "cyrillic"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin", "cyrillic"],
+});
+
+export const metadata: Metadata = {
+  title: "3D Print Farm - Профессиональная 3D-печать на заказ | PETG, PLA, ABS",
+  description: "Высокоточная 3D-печать из PETG, PLA, ABS и Carbon на современных FLSUN и FLASHFORGE. Быстрое изготовление прототипов и готовых изделий. Профессиональное качество, доступные цены.",
+  keywords: [
+    "3D печать на заказ",
+    "3D принтер услуги",
+    "печать PETG",
+    "печать PLA", 
+    "печать ABS",
+    "печать Carbon",
+    "FLSUN принтер",
+    "FLASHFORGE",
+    "3D прототипирование",
+    "серийная 3D печать",
+    "изготовление деталей",
+    "3D моделирование"
+  ].join(", "),
+  authors: [{ name: "3D Print Farm" }],
+  creator: "3D Print Farm",
+  publisher: "3D Print Farm",
+  robots: "index, follow",
+  openGraph: {
+    title: "3D Print Farm - Профессиональная 3D-печать на заказ",
+    description: "Печатаем идеи в реальность с высочайшей точностью. Современное оборудование FLSUN и FLASHFORGE для качественной 3D-печати.",
+    url: "https://3dprintfarm.ru",
+    siteName: "3D Print Farm",
+    images: [
+      {
+        url: "https://3dprintfarm.ru/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "3D Print Farm - Профессиональная 3D-печать",
+      },
+    ],
+    locale: "ru_RU",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "3D Print Farm - Профессиональная 3D-печать",
+    description: "Высокоточная 3D-печать на современном оборудовании FLSUN и FLASHFORGE",
+    images: ["https://3dprintfarm.ru/twitter-image.jpg"],
+  },
+  alternates: {
+    canonical: "https://3dprintfarm.ru",
+  },
+  verification: {
+    google: "your-google-verification-code",
+    yandex: "your-yandex-verification-code",
+  },
+  category: "technology",
+};
+
+// Structured Data for Local Business
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "3D Print Farm",
+  "description": "Профессиональная 3D-печать на заказ из различных материалов",
+  "url": "https://3dprintfarm.ru",
+  "telephone": "+7-XXX-XXX-XX-XX",
+  "email": "info@3dprintfarm.ru",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Ваша улица, дом",
+    "addressLocality": "Ваш город",
+    "postalCode": "XXXXXX",
+    "addressCountry": "RU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "XX.XXXXX",
+    "longitude": "XX.XXXXX"
+  },
+  "openingHours": [
+    "Mo-Fr 09:00-18:00",
+    "Sa 10:00-16:00"
+  ],
+  "serviceArea": {
+    "@type": "Country",
+    "name": "Russia"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "3D Печать услуги",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "3D печать из PETG",
+          "description": "Высокопрочная печать из PETG пластика"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service", 
+          "name": "3D печать из PLA",
+          "description": "Экологичная печать из PLA пластика"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "3D печать из ABS", 
+          "description": "Прочная печать из ABS пластика"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "3D печать из Carbon",
+          "description": "Сверхпрочная печать с углеволокном"
+        }
+      }
+    ]
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "127"
+  }
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="ru">
+      <head>
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        
+        {/* Additional Meta Tags */}
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="theme-color" content="#659497" />
+        <meta name="msapplication-TileColor" content="#659497" />
+        
+        {/* Favicons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+        
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GA_MEASUREMENT_ID');
+          `}
+        </Script>
+        
+        {/* Yandex.Metrica */}
+        <Script id="yandex-metrica" strategy="afterInteractive">
+          {`
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+            
+            ym(XXXXXX, "init", {
+              clickmap:true,
+              trackLinks:true,
+              accurateTrackBounce:true,
+              webvisor:true
+            });
+          `}
+        </Script>
+      </body>
+    </html>
+  );
+}

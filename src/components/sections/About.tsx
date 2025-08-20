@@ -2,7 +2,7 @@ import { FC } from "react";
 
 const About: FC = () => (
   <section id="about" className="text-center py-20 dark:bg-gray-900 dark:text-gray-200 max-w-5xl mx-auto">
-    <h1 className="text-4xl md:text-3xl font-bold mb-4 text-purple-900 dark:text-purple-400">О нас</h1>
+    <h1 className="text-4xl md:text-3xl font-bold mb-4 text-[#324b4d]">О нас</h1>
     <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
       Мы — команда энтузиастов и специалистов, объединённых общей идеей: сделать
       3D-печать доступной, быстрой и надёжной. Наша ферма 3D-принтеров оснащена

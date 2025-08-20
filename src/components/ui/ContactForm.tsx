@@ -53,44 +53,26 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
     }));
   };
 
-  const sendToTelegram = async (data: FormData) => {
-    const TELEGRAM_BOT_TOKEN = '7569248220:AAGCbGfI3sFMUDZf45SyFpYbfYHraeiFeNA';
-    const TELEGRAM_CHAT_ID = '1179555526';
-    
-    const message = `
-🔔 Новая заявка с сайта!
+const sendToTelegram = async (data: FormData) => {
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-👤 Имя: ${data.name}
-📧 Email: ${data.email}
-📱 Телефон: ${data.phone || 'Не указан'}
-⏰ Дата: ${new Date().toLocaleString('ru-RU')}
-    `.trim();
+    if (!response.ok) throw new Error("Request failed");
 
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: message,
-          parse_mode: 'HTML'
-        })
-      });
+    const result = await response.json();
+    return result.success;
+  } catch (error) {
+    console.error("Error sending to backend:", error);
+    return false;
+  }
+};
 
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Error sending to Telegram:', error);
-      return false;
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,10 +155,10 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-purple-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-[#659497] bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg p-6 w-full max-w-md text-gray-900">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-purple-900">Оставить заявку</h3>
+          <h3 className="text-xl font-bold text-[#324b4d]">Оставить заявку</h3>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -225,7 +207,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
               onChange={handleInputChange}
               required
               maxLength={50}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="Ваше имя"
             />
           </div>
@@ -242,7 +224,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
               onChange={handleInputChange}
               required
               maxLength={100}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="your@email.com"
             />
           </div>
@@ -258,7 +240,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
               value={formData.phone}
               onChange={handleInputChange}
               maxLength={20}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="7 (999) 123-45-67 (без спецсимволов)"
             />
           </div>
@@ -273,7 +255,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
               value={captcha.userAnswer}
               onChange={(e) => setCaptcha(prev => ({ ...prev, userAnswer: e.target.value }))}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="Введите ответ"
             />
           </div>
@@ -295,7 +277,7 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
                 !formData.email.trim() || 
                 !captcha.userAnswer.trim()
               }
-              className="flex-1 px-4 py-2 bg-purple-900 text-white rounded-md hover:bg-purple-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 px-4 py-2 bg-[#659497] text-white rounded-md hover:bg-[#4a7c80] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? 'Отправка...' : 'Отправить'}
             </button>
