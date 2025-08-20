@@ -6,7 +6,7 @@ const CTABanner: FC = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
-    <section className="py-16 bg-[#659497] text-center text-white ">
+    <section className="py-16 bg-[#659497] dark:bg-[#374a4d] text-center text-white ">
       <h2 className="text-3xl font-bold mb-4">Готовы начать печатать?</h2>
       
       <button

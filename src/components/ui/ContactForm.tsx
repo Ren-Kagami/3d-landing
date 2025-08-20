@@ -16,13 +16,13 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
   
-  // Anti-spam states
+
   const [honeypot, setHoneypot] = useState('');
   const [captcha, setCaptcha] = useState({ question: '', answer: 0, userAnswer: '' });
   const [formStartTime, setFormStartTime] = useState<number>(0);
   const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
 
-  // Generate simple math captcha
+
   const generateCaptcha = () => {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
