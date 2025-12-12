@@ -157,7 +157,9 @@ const Navbar: FC = () => {
           {navItems.map((item) => (
             <button
               key={item.id}
-              ref={(el) => (itemRefs.current[item.id] = el)}
+              ref={(el) => {
+                itemRefs.current[item.id] = el;
+              }}
               onClick={() => handleScroll(item.id)}
               onMouseEnter={() => moveBubble(item.id)}
               onMouseLeave={() => moveBubble(activeId)}
