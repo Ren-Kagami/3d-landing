@@ -1,5 +1,4 @@
 'use client';
-import Head from "next/head";
 import { FC } from "react";
 
 // Layout components
@@ -15,16 +14,8 @@ import WhyUs from "../components/sections/WhyUs";
 import Contacts from "../components/sections/Contacts";
 import CTABanner from "../components/sections/CTABanner";
 
-// Config
-import { appConfig } from "../config/app.config";
-
 const Home: FC = () => (
   <>
-    <Head>
-      <title>{appConfig.title}</title>
-      <meta name="description" content={appConfig.description} />
-      <meta name="author" content={appConfig.author} />
-    </Head>
     <Navbar />
     <div className="pt-20">
       <Hero />

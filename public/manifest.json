@@ -1,0 +1,22 @@
+{
+  "name": "3D Print Farm - Профессиональная 3D-печать на заказ",
+  "short_name": "3D Print Farm",
+  "description": "Высокоточная 3D-печать из PETG, PLA, ABS и Carbon на современных FLSUN и FLASHFORGE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#659497",
+  "theme_color": "#659497",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 Disallow: /admin/
+
+# Sitemaps
 Sitemap: https://3dprintfarm.ru/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

@@ -8,8 +8,8 @@ services:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
       PORT: 3000
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      TELEGRAM_BOT_TOKEN: 7569248220:AAGCbGfI3sFMUDZf45SyFpYbfYHraeiFeNA
+      TELEGRAM_CHAT_ID: 1179555526
     ports:
       - "3000:3000"
     restart: unless-stopped
