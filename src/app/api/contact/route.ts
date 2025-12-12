@@ -40,8 +40,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Invalid phone" }, { status: 400 });
     }
 
-    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
-    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!;
+    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      console.error("Missing Telegram credentials in environment");
+      return NextResponse.json(
+        { success: false, error: "Server misconfigured (missing Telegram credentials)" },
+        { status: 500 }
+      );
+    }
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
     const message = `
@@ -64,6 +72,11 @@ export async function POST(req: Request) {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        "Telegram API error",
+        JSON.stringify({ status: response.status, body: errorText }).slice(0, 500)
+      );
       throw new Error("Failed to send message to Telegram");
     }
 
