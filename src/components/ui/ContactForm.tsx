@@ -7,6 +7,8 @@ interface ContactFormProps {
   onClose: () => void;
 }
 
+const ANIMATION_MS = 240;
+
 const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -21,6 +23,8 @@ const ContactForm: FC<ContactFormProps> = ({ isOpen, onClose }) => {
   const [captcha, setCaptcha] = useState({ question: '', answer: 0, userAnswer: '' });
   const [formStartTime, setFormStartTime] = useState<number>(0);
   const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
+  const [isClosing, setIsClosing] = useState(false);
+  const [isRendered, setIsRendered] = useState(isOpen);
 
 
   const generateCaptcha = () => {
@@ -148,33 +152,58 @@ const sendToTelegram = async (data: FormData) => {
   // Initialize form when opened
   useEffect(() => {
     if (isOpen) {
+      setIsRendered(true);
+      setIsClosing(false);
       resetForm();
+      return;
     }
-  }, [isOpen]);
 
-  if (!isOpen) return null;
+    if (isRendered) {
+      setIsClosing(true);
+      const timeout = setTimeout(() => {
+        setIsRendered(false);
+        setIsClosing(false);
+      }, ANIMATION_MS);
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen, isRendered]);
+
+  if (!isRendered) return null;
+
+  const handleCloseWithAnimation = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, ANIMATION_MS);
+  };
 
   return (
-    <div className="fixed inset-0 bg-[#659497] bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white/80 backdrop-blur-md rounded-lg p-6 w-full max-w-md text-gray-900 border border-gray-300/30">
+    <div
+      className="fixed inset-0 bg-gradient-to-br from-[#659497]/50 via-[#46cbd4]/30 to-[#117178]/50 dark:from-[#0b272a]/70 dark:via-[#0f3d44]/60 dark:to-[#0a1c20]/70 backdrop-blur-lg flex items-center justify-center z-50 p-4"
+      style={{ animation: `${isClosing ? "fadeBgOut" : "fadeBg"} ${ANIMATION_MS}ms ease-in-out forwards` }}
+    >
+      <div
+        className="bg-white/65 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 w-full max-w-md text-gray-900 dark:text-gray-100 border border-white/30 dark:border-white/10 shadow-[0_20px_60px_rgba(17,113,120,0.35)] dark:shadow-[0_20px_60px_rgba(8,30,35,0.6)]"
+        style={{ animation: `${isClosing ? "glassPopOut" : "glassPop"} ${ANIMATION_MS}ms ease-in-out forwards` }}
+      >
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-[#324b4d]">Оставить заявку</h3>
+          <h3 className="text-xl font-bold text-[#324b4d] dark:text-gray-100">Оставить заявку</h3>
           <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            onClick={handleCloseWithAnimation}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white text-2xl"
           >
             ×
           </button>
         </div>
 
         {submitStatus === 'success' && (
-          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 dark:bg-emerald-900/40 dark:border-emerald-500/40 dark:text-emerald-100 rounded">
             Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
           </div>
         )}
 
         {submitStatus === 'error' && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 dark:bg-rose-900/40 dark:border-rose-500/40 dark:text-rose-100 rounded">
             Произошла ошибка или неверно заполнена капча. Попробуйте еще раз.
           </div>
         )}
@@ -196,7 +225,7 @@ const sendToTelegram = async (data: FormData) => {
           />
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Имя *
             </label>
             <input
@@ -207,13 +236,13 @@ const sendToTelegram = async (data: FormData) => {
               onChange={handleInputChange}
               required
               maxLength={50}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-white/10 rounded-md bg-white dark:bg-white/5 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="Ваше имя"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Email *
             </label>
             <input
@@ -224,13 +253,13 @@ const sendToTelegram = async (data: FormData) => {
               onChange={handleInputChange}
               required
               maxLength={100}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-white/10 rounded-md bg-white dark:bg-white/5 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="your@email.com"
             />
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Телефон
             </label>
             <input
@@ -240,13 +269,13 @@ const sendToTelegram = async (data: FormData) => {
               value={formData.phone}
               onChange={handleInputChange}
               maxLength={20}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-white/10 rounded-md bg-white dark:bg-white/5 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="7 (999) 123-45-67 (без спецсимволов)"
             />
           </div>
 
           <div>
-            <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Проверка: {captcha.question} *
             </label>
             <input
@@ -255,7 +284,7 @@ const sendToTelegram = async (data: FormData) => {
               value={captcha.userAnswer}
               onChange={(e) => setCaptcha(prev => ({ ...prev, userAnswer: e.target.value }))}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-white/10 rounded-md bg-white dark:bg-white/5 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#befcff] focus:border-transparent"
               placeholder="Введите ответ"
             />
           </div>
@@ -263,8 +292,8 @@ const sendToTelegram = async (data: FormData) => {
           <div className="flex gap-3 pt-4">
             <button
               type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+            onClick={handleCloseWithAnimation}
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-100 rounded-md hover:bg-gray-50 dark:hover:bg-white/10 transition-colors"
               disabled={isSubmitting}
             >
               Отмена
@@ -277,13 +306,51 @@ const sendToTelegram = async (data: FormData) => {
                 !formData.email.trim() || 
                 !captcha.userAnswer.trim()
               }
-              className="flex-1 px-4 py-2 bg-[#659497] text-white rounded-md hover:bg-[#4a7c80] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 px-4 py-2 bg-[#659497] dark:bg-[#46cbd4] text-white rounded-md hover:bg-[#4a7c80] dark:hover:bg-[#65dce3] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? 'Отправка...' : 'Отправить'}
             </button>
           </div>
         </form>
       </div>
+      <style jsx>{`
+        @keyframes fadeBg {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes glassPop {
+          from {
+            transform: scale(0.95) translateY(12px);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+          }
+        }
+        @keyframes fadeBgOut {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+        @keyframes glassPopOut {
+          from {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+          }
+          to {
+            transform: scale(0.95) translateY(12px);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };
