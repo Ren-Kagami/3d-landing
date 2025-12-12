@@ -156,7 +156,7 @@ const sendToTelegram = async (data: FormData) => {
 
   return (
     <div className="fixed inset-0 bg-[#659497] bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md text-gray-900">
+      <div className="bg-white/80 backdrop-blur-md rounded-lg p-6 w-full max-w-md text-gray-900 border border-gray-300/30">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-bold text-[#324b4d]">Оставить заявку</h3>
           <button
